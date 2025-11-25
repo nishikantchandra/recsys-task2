@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Two-Tower Movie Recommender with Text Query</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.11.0"></script>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>🎬 Two-Tower Movie Recommender</h1>
+            <p class="subtitle">Query-based recommendations using Two-Tower architecture + Cosine Similarity</p>
+        </header>
+
+        <!-- Control Panel -->
+        <div class="card control-panel">
+            <h3>⚙️ Control Panel</h3>
+            <div class="button-group">
+                <button id="load-btn" class="btn btn-primary" onclick="loadData()">
+                    <span class="btn-icon">📂</span> Load Data
+                </button>
+                <button id="train-btn" class="btn btn-secondary" onclick="trainModel()" disabled>
+                    <span class="btn-icon">🧠</span> Train Model
+                </button>
+            </div>
+            <div id="status" class="status-message">Click "Load Data" to start</div>
+        </div>
+
+        <!-- Query Input Section -->
+        <div class="card query-section" id="query-section" style="display:none;">
+            <h3>🔍 Search Movies</h3>
+            <div class="input-group">
+                <label for="query-input">Enter your query:</label>
+                <textarea id="query-input"
+                    placeholder="e.g., 'action movies with space themes' or 'romantic comedy about friendship'"
+                    rows="3"></textarea>
+            </div>
+            <div class="slider-group">
+                <label for="num-recommendations">Number of recommendations: <span id="num-recs-value">10</span></label>
+                <input type="range" id="num-recommendations" min="5" max="50" value="10"
+                    oninput="document.getElementById('num-recs-value').textContent = this.value">
+            </div>
+            <div class="slider-group">
+                <label for="content-weight">Content weight (α): <span id="content-weight-value">0.4</span></label>
+                <input type="range" id="content-weight" min="0" max="1" step="0.1" value="0.4"
+                    oninput="document.getElementById('content-weight-value').textContent = this.value">
+                <small>Balance between content-based (α) and collaborative filtering (1-α) similarity</small>
+            </div>
+            <button id="recommend-btn" class="btn btn-accent" onclick="getRecommendations()">
+                <span class="btn-icon">🎯</span> Get Recommendations
+            </button>
+        </div>
+
+        <!-- Visualization Section -->
+        <div class="visualization-section">
+            <div class="card chart-card">
+                <h3>📊 Training Loss</h3>
+                <canvas id="loss-chart" width="600" height="300"></canvas>
+            </div>
+            <div class="card chart-card">
+                <h3>🗺️ Item Embeddings (PCA)</h3>
+                <canvas id="embedding-chart" width="600" height="400"></canvas>
+                <div id="hover-info" class="hover-info"></div>
+            </div>
+        </div>
+
+        <!-- Results Section -->
+        <div class="card results-section" id="results-section" style="display:none;">
+            <h3>📋 Results</h3>
+
+            <!-- Query Analysis -->
+            <div id="query-analysis" class="query-analysis"></div>
+
+            <!-- Recommendations Table -->
+            <div id="recommendations" class="recommendations-container"></div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="two-tower.js"></script>
+    <script src="similarity.js"></script>
+    <script src="phi-integration.js"></script>
+    <script src="graph.js"></script>
+    <script src="app.js"></script>
+</body>
+
+</html>
